@@ -82,6 +82,7 @@
 #endif
 #ifdef HAVE_LIBPULSE
 #include "modules/pulseaudio.hpp"
+#include "modules/timer.hpp"
 #include "modules/pulseaudio_slider.hpp"
 #endif
 #ifdef HAVE_LIBMPDCLIENT
@@ -285,6 +286,12 @@ waybar::AModule* waybar::Factory::makeModule(const std::string& name,
     if (ref == "pulseaudio") {
       return new waybar::modules::Pulseaudio(id, config_[name]);
     }
+
+    if (ref == "timer") {
+      return new waybar::modules::Timer(id, config_[name]);
+    }
+
+
     if (ref == "pulseaudio/slider") {
       return new waybar::modules::PulseaudioSlider(id, config_[name]);
     }
