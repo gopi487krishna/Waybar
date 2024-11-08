@@ -8,6 +8,7 @@
 #include "client.hpp"
 #include "factory.hpp"
 #include "group.hpp"
+#include "sgroup.hpp"
 
 #ifdef HAVE_SWAY
 #include "modules/sway/bar.hpp"
@@ -488,15 +489,26 @@ void waybar::Bar::getModules(const Factory& factory, const std::string& pos,
         auto ref = name.asString();
         AModule* module;
 
-        if (ref.compare(0, 6, "group/") == 0 && ref.size() > 6) {
+        bool is_group = (ref.compare(0, 6, "group/") == 0 && ref.size() > 6);
+        bool is_sgroup = (ref.compare(0, 7, "sgroup/") == 0 && ref.size() > 7);
+        /*bool is_sgroup = false;*/
+
+        if (is_group || is_sgroup) {
+          auto id_start_pos = (is_group ? 6 : 7);
           auto hash_pos = ref.find('#');
-          auto id_name = ref.substr(6, hash_pos - 6);
+          auto id_name = ref.substr(id_start_pos, hash_pos - id_start_pos);
           auto class_name = hash_pos != std::string::npos ? ref.substr(hash_pos + 1) : "";
 
           auto vertical = (group != nullptr ? group->getBox().get_orientation()
                                             : box_.get_orientation()) == Gtk::ORIENTATION_VERTICAL;
 
-          auto* group_module = new waybar::Group(id_name, class_name, config[ref], vertical);
+          Group* group_module = nullptr;
+
+          if (is_group)
+            group_module = new waybar::Group(id_name, class_name, config[ref], vertical);
+          else
+            group_module = new waybar::SGroup(id_name, class_name, config[ref], vertical);
+
           getModules(factory, ref, group_module);
           module = group_module;
         } else {

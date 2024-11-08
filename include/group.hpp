@@ -17,7 +17,7 @@ class Group : public AModule {
   operator Gtk::Widget &() override;
 
   virtual Gtk::Box &getBox();
-  void addWidget(Gtk::Widget &widget);
+  virtual void addWidget(Gtk::Widget &widget);
 
  protected:
   Gtk::Box box;

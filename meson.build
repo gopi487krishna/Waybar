@@ -175,6 +175,7 @@ src_files = files(
     'src/client.cpp',
     'src/config.cpp',
     'src/group.cpp',
+    'src/sgroup.cpp',
     'src/util/portal.cpp',
     'src/util/enum.cpp',
     'src/util/prepare_for_sleep.cpp',
